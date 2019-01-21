@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+import sys
+from sqlplot import SQLPlot
+from matplotlib import pyplot as plt
+
+def print_help_message():
+    print("SQLPlot usage:")
+    print("First arguments is the database name")
+    print("Second argument is an SQL query that return")
+    print("at least to columns.")
+    print()
+    print("Example:")
+    print("sqlplot sqlite:///somedatabase.db 'select x, y from table'")
+    print()
+    print("Optional arguments:")
+    print("--noshow - Do not show the figure on return")
+    print("--out=<somefile.png> - Save the figure as a file with givne filename")
+
+def main(argv):
+    for arg in argv:
+        if "-h" in arg or "--help" in arg:
+            print_help_message()
+            return
+    
+    # Check for optional arguments
+    show = True
+    outfname = ""
+    for arg in argv:
+        if "--noshow" in arg:
+            show = False
+        elif "--out=" in arg:
+            outfname = arg.splot("--out=")
+
+    db_name = argv[0]
+    sql = argv[1]
+
+    plotter = SQLPlot(db_name)
+    plotter.plot_query(sql)
+
+    if outfname != "":
+        plt.savefig(outfname)
+        print("Figure written to {}".format(outfname))
+
+    if show:
+        plt.show()
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
