@@ -48,7 +48,7 @@ class SQLPlot(object):
             xlabel = keys[0]
             ylabel = keys[1]
             x.append(row[keys[0]])
-            y.append(row(keys[1]))
+            y.append(row[keys[1]])
     
         self.plot(x, y, xlabel=xlabel, ylabel=ylabel)
 
